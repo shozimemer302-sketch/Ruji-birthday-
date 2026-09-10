@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Ruji! 💖</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary: #ff4b2b;
+      --secondary: #ff416c;
+      --card-bg: rgba(255, 255, 255, 0.12);
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0c20 0%, #1a102f 50%, #2b0826 100%);
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Floating Balloons Layer */
+    .balloon-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 35px;
+      height: 45px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      animation: floatUp 8s infinite linear;
+    }
+    .balloon::before {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 16px;
+      width: 2px;
+      height: 12px;
+      background: rgba(255,255,255,0.5);
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+      100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+    }
+
+    .main-content {
+      position: relative;
+      z-index: 1;
+      padding-bottom: 50px;
+    }
+
+    .header {
+      padding: 40px 20px 20px;
+    }
+    h1 {
+      font-size: 2.3rem;
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+    }
+
+    /* Romantic Polaroid Scrapbook Container */
+    .polaroid-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .polaroid-card {
+      background: #ffffff;
+      color: #222;
+      padding: 12px 12px 20px 12px;
+      width: 240px;
+      border-radius: 8px;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    .polaroid-card:nth-child(even) { transform: rotate(-3deg); }
+    .polaroid-card:nth-child(odd) { transform: rotate(3deg); }
+    .polaroid-card:hover {
+      transform: scale(1.08) rotate(0deg);
+      z-index: 10;
+      box-shadow: 0 18px 35px rgba(255, 65, 108, 0.4);
+    }
+    .polaroid-img-box {
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      border-radius: 4px;
+      background: #f0f0f0;
+    }
+    .polaroid-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .polaroid-caption {
+      font-family: 'Georgia', serif;
+      font-size: 0.95rem;
+      margin-top: 12px;
+      color: #d63384;
+      font-weight: bold;
+      line-height: 1.3;
+    }
+
+    /* Flip Photo Card with Urdu Poetry */
+    .poetry-flip-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .photo-flip-card {
+      perspective: 1000px;
+      height: 340px;
+    }
+    .photo-flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      border-radius: 15px;
+    }
+    .photo-flip-card.flipped .photo-flip-inner {
+      transform: rotateY(180deg);
+    }
+    .photo-front, .photo-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .photo-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .photo-front-overlay {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      padding: 10px;
+      box-sizing: border-box;
+      font-size: 0.85rem;
+    }
+    .photo-back {
+      background: linear-gradient(135deg, #ff416c, #8a2387);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .poetry-text {
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.6;
+      color: #fff;
+    }
+
+    /* Surprises Grid */
+    .surprises-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    }
+    button {
+      background: linear-gradient(45deg, var(--secondary), var(--primary));
+      border: none;
+      color: white;
+      padding: 10px 22px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Balloons Layer -->
+  <div class="balloon-container" id="balloonBox"></div>
+
+  <div class="main-content">
+    <div class="header">
+      <h1>Happy Birthday, My Beloved Ruji! 👑</h1>
+      <p>Romantic Poetry Scrapbook & 80 Interactive Surprises By Shehroz 🌹</p>
+      <button onclick="triggerConfetti()">Blast Celebration! 🎉</button>
+    </div>
+
+    <!-- Section 1: Romantic Polaroid Scrapbook with Poetry -->
+    <h2 style="color:#ff416c; margin-top:30px;">📸 Scrapbook Memory Frames (Tap Photo)</h2>
+    <div class="polaroid-grid" id="polaroidContainer"></div>
+
+    <!-- Section 2: Interactive Photo Cards with Shayari on Back -->
+    <h2 style="color:#ff416c; margin-top:40px;">💌 Tap Photo To Reveal Romantic Poetry</h2>
+    <div class="poetry-flip-container" id="poetryFlipContainer"></div>
+
+    <!-- Section 3: 80 Surprises Grid -->
+    <h2 style="color:#ff416c; margin-top:40px;">🎁 80 Interactive Surprises & Features</h2>
+    <div class="surprises-grid" id="surprisesContainer"></div>
+  </div>
+
+  <script>
+    // Create Background Balloons
+    const balloonBox = document.getElementById('balloonBox');
+    const colors = ['#ff416c', '#ff4b2b', '#ffb347', '#ffcc00', '#9b59b6'];
+    for(let i=0; i<30; i++){
+      let balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = Math.random() * 100 + 'vw';
+      balloon.style.animationDuration = (Math.random() * 5 + 6) + 's';
+      balloon.style.animationDelay = Math.random() * 5 + 's';
+      balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+      balloonBox.appendChild(balloon);
+    }
+
+    // Direct Image Links Array
+    const photoIds = [
+      "dJXVVnVZ", "RpKzxK2f", "rK3tSPRK", "67xZKkvP", "v4K0ktX7", "tnyptyz",
+      "KpTzN5Cr", "v4pW8t5j", "cc88bBfS", "XZynJfRQ", "mrFWrCSc", "QjJYYKqK",
+      "0jGR0j12", "Dhv913W", "5Wtmz86t", "PGjTBGTK", "w3WJxhG", "5WHftw14"
+    ];
+
+    const romanticPoetry = [
+      "Tumhari muskurahat hi meri dunya hai, Ruji! ❤️",
+      "Teri zulfon ke saaye mein meri sham dhalte hai ✨",
+      "Shehroz ki har sans par sirf tumhara naam hai 💓",
+      "Tum mili toh mili mujhe dunya ki har khushi 🌹",
+      "Har janam mein chahiye tera hi sath meri jaan! 💕",
+      "Meri aankhon ka noor ho tum, Ruji! 👑",
+      "Tum se hi subah meri, tum se hi meri sham! ✨",
+      "Zindagi khoobsurat hai kyun ke tum sath ho! 💞"
+    ];
+
+    // Populate Polaroid Scrapbook
+    const polaroidContainer = document.getElementById('polaroidContainer');
+    photoIds.slice(0, 9).forEach((id, index) => {
+      const card = document.createElement('div');
+      card.className = 'polaroid-card';
+      card.onclick = () => triggerConfetti();
+      card.innerHTML = `
+        <div class="polaroid-img-box">
+          <img src="https://i.ibb.co/${id}/photo.jpg" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500'" alt="Ruji Memory">
+        </div>
+        <div class="polaroid-caption">${romanticPoetry[index % romanticPoetry.length]}</div>
+      `;
+      polaroidContainer.appendChild(card);
+    });
+
+    // Populate Poetry Flip Cards
+    const poetryFlipContainer = document.getElementById('poetryFlipContainer');
+    photoIds.slice(9, 18).forEach((id, index) => {
+      const card = document.createElement('div');
+      card.className = 'photo-flip-card';
+      card.innerHTML = `
+        <div class="photo-flip-inner" onclick="this.parentElement.classList.toggle('flipped')">
+          <div class="photo-front">
+            <img src="https://i.ibb.co/${id}/photo.jpg" onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500'" alt="Ruji Photo">
+            <div class="photo-front-overlay">Tap to read Poetry 👆</div>
+          </div>
+          <div class="photo-back">
+            <div class="poetry-text">" ${romanticPoetry[(index + 3) % romanticPoetry.length]} "</div>
+            <p style="margin-top:15px; font-size:0.85rem; color:#ffe6e6;">— Forever Yours, Shehroz ❤️</p>
+          </div>
+        </div>
+      `;
+      poetryFlipContainer.appendChild(card);
+    });
+
+    // Populate 80 Interactive Surprises Grid
+    const surprisesContainer = document.getElementById('surprisesContainer');
+    
+    // Core Modules
+    const modules = [
+      { title: "🎂 Interactive Cake & Candle", html: "<p id='cakeMsg'>Blow Candles & Cut Cake!</p><button onclick='cutCake()'>🕯️ Cut Cake</button>" },
+      { title: "❤️ Shehroz & Ruji Love Meter", html: "<p id='loveMeter'>Click to Calculate Match</p><button onclick='calcLove()'>Calculate Match 🔥</button>" },
+      { title: "💓 Heartbeat Speedometer", html: "<p id='bpm'>My BPM: 75 Normal</p><button onclick='boostBpm()'>Touch Shehroz's Heart 💓</button>" },
+      { title: "🌹 Magic Rose Garden", html: "<p id='roseState'>🌱 Tap to Bloom</p><button onclick='bloomRose()'>Bloom Special Rose 🌹</button>" },
+      { title: "🎰 Unlimited Compliment Wheel", html: "<p id='compText'>Spin for Ruji!</p><button onclick='spin()'>Spin Wheel 🎡</button>" }
+    ];
+
+    modules.forEach(mod => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<h3>${mod.title}</h3>${mod.html}`;
+      surprisesContainer.appendChild(card);
+    });
+
+    for (let i = 6; i <= 80; i++) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>Surprise #${i} 💖</h3>
+        <p>Tap to reveal romantic secret #${i}</p>
+        <button onclick="alert('Ruji, Shehroz loves you beyond infinity! ❤️ (Secret #${i})')">Reveal Wish ✨</button>
+      `;
+      surprisesContainer.appendChild(card);
+    }
+
+    // Helper Functions
+    function triggerConfetti() {
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+    }
+    function cutCake() {
+      document.getElementById('cakeMsg').innerText = "🎉 Happy Birthday Sweetest Wife Ruji! 🍰";
+      triggerConfetti();
+    }
+    function calcLove() {
+      document.getElementById('loveMeter').innerText = "🔥 1000% Eternal Soulmate Match!";
+      triggerConfetti();
+    }
+    function boostBpm() {
+      document.getElementById('bpm').innerText = "💓 200+ BPM! (Heart beats crazy for you!)";
+    }
+    function bloomRose() {
+      document.getElementById('roseState').innerText = "🌹 3D Red Magic Rose Bloomed For Ruji!";
+    }
+    function spin() {
+      const list = ["You are the prettiest woman!", "Shehroz loves you endlessly!", "World's Best Wife! 🏆", "Your smile is my paradise! ✨"];
+      document.getElementById('compText').innerText = list[Math.floor(Math.random()*list.length)];
+    }
+  </script>
+</body>
+</html>
