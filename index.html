@@ -172,15 +172,52 @@
       border: none; color: white; padding: 10px 22px; border-radius: 20px; cursor: pointer; margin-top: 10px; font-weight: bold;
     }
 
-    .flip-card { perspective: 1000px; height: 130px; }
+    .flip-card { perspective: 1000px; height: 160px; }
     .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
     .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
     .flip-front, .flip-back {
       position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; padding: 12px; box-sizing: border-box; font-size: 0.9rem;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; box-sizing: border-box; font-size: 0.9rem;
     }
     .flip-front { background: rgba(255,255,255,0.15); }
-    .flip-back { background: linear-gradient(45deg, #ff416c, #8a2387); transform: rotateY(180deg); }
+    .flip-back { background: linear-gradient(135deg, #ff416c, #8a2387); transform: rotateY(180deg); }
+
+    /* Special Image Box inside Surprise Cards */
+    .surprise-img-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+    }
+    .surprise-img-content img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    /* Rose Display Box */
+    #roseContainer {
+      display: none;
+      margin-top: 15px;
+    }
+    #roseContainer img {
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #ff416c;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 10px #ff416c; }
+      50% { transform: scale(1.05); box-shadow: 0 0 25px #ff4b2b; }
+      100% { transform: scale(0.95); box-shadow: 0 0 10px #ff416c; }
+    }
   </style>
 </head>
 <body>
@@ -198,7 +235,7 @@
   <div class="main-content">
     <div class="header">
       <h1>Happy Birthday, My Queen Ruji! 👑🩷</h1>
-      <p>80 Unique Romantic Surprises & Custom Shayari For Ruji 🩷 By Shehroz 🌹</p>
+      <p>100 Unique Interactive Surprises & Custom Shayari For Ruji 🩷 By Shehroz 🌹</p>
       <button onclick="triggerConfetti()">Blast Celebration! 🎉</button>
     </div>
 
@@ -208,7 +245,7 @@
     <h2 style="color:#ff416c; margin-top:40px;">💌 Tap Photo To Reveal Romantic Poetry</h2>
     <div class="poetry-flip-container" id="poetryFlipContainer"></div>
 
-    <h2 style="color:#ff416c; margin-top:40px;">🎁 80 Unique Interactive Surprises</h2>
+    <h2 style="color:#ff416c; margin-top:40px;">🎁 100 Unique Interactive Surprises</h2>
     <div class="surprises-grid" id="surprisesContainer"></div>
   </div>
 
@@ -325,12 +362,12 @@
 
     const surprisesContainer = document.getElementById('surprisesContainer');
     
-    // Core Modules (1 to 5)
+    // Core Modules (1 to 5) - Rose module upgraded to display real image!
     const modules = [
       { title: "🎂 Ruji's Cake 🩷", html: "<p id='cakeMsg'>Blow Candles & Cut Cake, Ruji 🩷!</p><button onclick='cutCake()'>🕯️ Cut Cake</button>" },
       { title: "❤️ Shehroz & Ruji 🩷 Love Match", html: "<p id='loveMeter'>Click to Calculate Match</p><button onclick='calcLove()'>Calculate Match 🔥</button>" },
       { title: "💓 Shehroz's Heart for Ruji 🩷", html: "<p id='bpm'>My BPM: 75 Normal</p><button onclick='boostBpm()'>Touch Shehroz's Heart 💓</button>" },
-      { title: "🌹 Magic Rose for Ruji 🩷", html: "<p id='roseState'>🌱 Tap to Bloom</p><button onclick='bloomRose()'>Bloom Special Rose 🌹</button>" },
+      { title: "🌹 Magic Rose for Ruji 🩷", html: "<p id='roseState'>🌱 Tap to Bloom</p><button onclick='bloomRose()'>Bloom Special Rose 🌹</button><div id='roseContainer'><img src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500' alt='Red Rose'></div>" },
       { title: "🎡 Compliment Wheel for Ruji 🩷", html: "<p id='compText'>Spin for Ruji 🩷!</p><button onclick='spin()'>Spin Wheel 🎡</button>" }
     ];
 
@@ -341,6 +378,7 @@
       surprisesContainer.appendChild(card);
     });
 
+    // Surprises 6 to 80 (Text Wishes)
     const uniqueWishes = [
       "Ruji 🩷, aapki hansi Shehroz ka sabse bada taweez hai!",
       "Promise: Aaj se Ruji 🩷 ke liye coffee hamesha Shehroz banayega!",
@@ -435,6 +473,51 @@
       surprisesContainer.appendChild(card);
     }
 
+    // NEW 20 VISUAL SURPRISES (#81 to #100) WITH REAL PICTURES ON TAP
+    const visualSurprises = [
+      { text: "Grand Delicious Birthday Cake 🎂", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300" },
+      { text: "A Giant Cute Teddy Bear Hug 🧸", img: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=300" },
+      { text: "Box of Luxury Chocolates 🍫", img: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=300" },
+      { text: "Diamond Engagement Ring 💍", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=300" },
+      { text: "Romantic Red Roses Bouquet 💐", img: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=300" },
+      { text: "Sparkling Birthday Fireworks 🎆", img: "https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=300" },
+      { text: "Eternal Golden Rose For Ruji 🌹✨", img: "https://images.unsplash.com/photo-1533616688419-b7a585564566?w=300" },
+      { text: "Candlelight Dinner Date 🕯️🍷", img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=300" },
+      { text: "Cute Birthday Crown For Queen 👑", img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=300" },
+      { text: "Heart Shaped Balloons 🎈❤️", img: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=300" },
+      { text: "Sweet Cupcakes Treat 🧁", img: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=300" },
+      { text: "Special Sealed Love Letter 💌", img: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300" },
+      { text: "Magical Celebration Gift Box 🎁", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=300" },
+      { text: "Romantic Stargazing Night 🌟", img: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=300" },
+      { text: "Delicious Strawberry Dessert 🍓", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300" },
+      { text: "Cute Sleeping Kitten Hug 🐾", img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300" },
+      { text: "Pink Heart Sunglasses 🕶️💖", img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=300" },
+      { text: "Warm Coffee Date Together ☕", img: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=300" },
+      { text: "Forever Love Promise Key 🔑❤️", img: "https://images.unsplash.com/photo-1582139329536-e7284fece509?w=300" },
+      { text: "Shehroz & Ruji Infinity Love Heart 💖♾️", img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=300" }
+    ];
+
+    for (let i = 0; i < visualSurprises.length; i++) {
+      const cardNum = i + 81;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>Surprise Card #${cardNum} 🩷</h3>
+        <div class="flip-card" onclick="this.classList.toggle('flipped'); triggerConfetti();">
+          <div class="flip-card-inner">
+            <div class="flip-front">Tap for Secret Surprise 🎁</div>
+            <div class="flip-back">
+              <div class="surprise-img-content">
+                <img src="${visualSurprises[i].img}" alt="Surprise">
+                <span style="font-size:0.8rem; font-weight:bold;">${visualSurprises[i].text}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      surprisesContainer.appendChild(card);
+    }
+
     function triggerConfetti() {
       confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
     }
@@ -450,7 +533,9 @@
       document.getElementById('bpm').innerText = "💓 200+ BPM! (Shehroz's Heart beats crazy for Ruji 🩷!)";
     }
     function bloomRose() {
-      document.getElementById('roseState').innerText = "🌹 3D Red Magic Rose Bloomed For Ruji 🩷!";
+      document.getElementById('roseState').innerText = "🌹 Real Red Magic Rose Bloomed For Ruji 🩷!";
+      document.getElementById('roseContainer').style.display = 'block';
+      triggerConfetti();
     }
     function spin() {
       const list = ["Ruji 🩷 is the prettiest woman!", "Shehroz loves Ruji 🩷 endlessly!", "Ruji 🩷 is World's Best Wife! 🏆", "Ruji 🩷's smile is Shehroz's paradise! ✨"];
