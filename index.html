@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Ruji! 🩷</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary: #ff4b2b;
+      --secondary: #ff416c;
+      --card-bg: rgba(255, 255, 255, 0.12);
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0c20 0%, #1a102f 50%, #2b0826 100%);
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Floating Balloons Layer */
+    .balloon-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -160px;
+      width: 95px;  /* Big Balloon Size */
+      height: 115px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      animation: floatUp 10s infinite linear;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.4);
+    }
+    .balloon::before {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 46px;
+      width: 2px;
+      height: 22px;
+      background: rgba(255,255,255,0.7);
+    }
+    .balloon-text {
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 0.8rem;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0,0,0,0.8);
+      text-align: center;
+      padding: 4px;
+      line-height: 1.2;
+      pointer-events: none;
+      word-break: break-word;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.95; }
+      100% { transform: translateY(-130vh) rotate(15deg); opacity: 0; }
+    }
+
+    .main-content {
+      position: relative;
+      z-index: 1;
+      padding-bottom: 50px;
+    }
+
+    .header { padding: 40px 20px 20px; }
+    h1 {
+      font-size: 2.3rem;
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+    }
+
+    .polaroid-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .polaroid-card {
+      background: #ffffff;
+      color: #222;
+      padding: 12px 12px 20px 12px;
+      width: 240px;
+      border-radius: 8px;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+    .polaroid-card:nth-child(even) { transform: rotate(-3deg); }
+    .polaroid-card:nth-child(odd) { transform: rotate(3deg); }
+    .polaroid-card:hover { transform: scale(1.08) rotate(0deg); z-index: 10; }
+    .polaroid-img-box { width: 100%; height: 260px; overflow: hidden; border-radius: 4px; background: #f0f0f0; }
+    .polaroid-img-box img { width: 100%; height: 100%; object-fit: cover; }
+    .polaroid-caption { font-family: 'Georgia', serif; font-size: 0.95rem; margin-top: 12px; color: #d63384; font-weight: bold; }
+
+    .poetry-flip-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .photo-flip-card { perspective: 1000px; height: 340px; }
+    .photo-flip-inner {
+      position: relative; width: 100%; height: 100%;
+      transition: transform 0.8s; transform-style: preserve-3d; cursor: pointer; border-radius: 15px;
+    }
+    .photo-flip-card.flipped .photo-flip-inner { transform: rotateY(180deg); }
+    .photo-front, .photo-back {
+      position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+      border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+    .photo-front img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-front-overlay {
+      position: absolute; bottom: 0; width: 100%;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 10px; box-sizing: border-box; font-size: 0.85rem;
+    }
+    .photo-back {
+      background: linear-gradient(135deg, #ff416c, #8a2387); transform: rotateY(180deg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
+    }
+
+    .surprises-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px; padding: 20px; max-width: 1100px; margin: 0 auto;
+    }
+    .card {
+      background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 15px;
+      padding: 20px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    }
+    button {
+      background: linear-gradient(45deg, var(--secondary), var(--primary));
+      border: none; color: white; padding: 10px 22px; border-radius: 20px; cursor: pointer; margin-top: 10px; font-weight: bold;
+    }
+
+    .flip-card { perspective: 1000px; height: 130px; }
+    .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back {
+      position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; padding: 12px; box-sizing: border-box; font-size: 0.9rem;
+    }
+    .flip-front { background: rgba(255,255,255,0.15); }
+    .flip-back { background: linear-gradient(45deg, #ff416c, #8a2387); transform: rotateY(180deg); }
+  </style>
+</head>
+<body>
+
+  <div class="balloon-container" id="balloonBox"></div>
+
+  <div class="main-content">
+    <div class="header">
+      <h1>Happy Birthday, My Queen Ruji! 👑🩷</h1>
+      <p>80 Unique Romantic Surprises & Custom Shayari For Ruji 🩷 By Shehroz 🌹</p>
+      <button onclick="triggerConfetti()">Blast Celebration! 🎉</button>
+    </div>
+
+    <h2 style="color:#ff416c; margin-top:30px;">📸 Scrapbook Memory Frames (Tap Photo)</h2>
+    <div class="polaroid-grid" id="polaroidContainer"></div>
+
+    <h2 style="color:#ff416c; margin-top:40px;">💌 Tap Photo To Reveal Romantic Poetry</h2>
+    <div class="poetry-flip-container" id="poetryFlipContainer"></div>
+
+    <h2 style="color:#ff416c; margin-top:40px;">🎁 80 Unique Interactive Surprises</h2>
+    <div class="surprises-grid" id="surprisesContainer"></div>
+  </div>
+
+  <script>
+    // Custom Balloon Names List
+    const balloonBox = document.getElementById('balloonBox');
+    const colors = ['#ff416c', '#ff4b2b', '#e0245e', '#d63384', '#9b59b6', '#ff6b6b'];
+    
+    const customBalloonNames = [
+      "AROOJ 🩷",
+      "SHOJI KI JAAN🩷",
+      "SHOJI ki princes",
+      "SHOJI KI LADLI🩷",
+      "SHOJIRUJI🫶🏻🩷",
+      "SHOJI KI TEEVIN👸🏻💋🌸🩷",
+      "SHOJI KI WIFEY🩷💋",
+      "HBD RUJI💋🫀",
+      "I LOVE YOU RUJI🩷💋🫀🌸"
+    ];
+
+    for(let i=0; i<27; i++){
+      let balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = Math.random() * 88 + 'vw';
+      balloon.style.animationDuration = (Math.random() * 6 + 9) + 's';
+      balloon.style.animationDelay = Math.random() * 6 + 's';
+      balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+      
+      let textSpan = document.createElement('span');
+      textSpan.className = 'balloon-text';
+      textSpan.innerText = customBalloonNames[i % customBalloonNames.length];
+      balloon.appendChild(textSpan);
+
+      balloonBox.appendChild(balloon);
+    }
+
+    const photoIds = [
+      "dJXVVnVZ", "RpKzxK2f", "rK3tSPRK", "67xZKkvP", "v4K0ktX7", "tnyptyz",
+      "KpTzN5Cr", "v4pW8t5j", "cc88bBfS", "XZynJfRQ", "mrFWrCSc", "QjJYYKqK",
+      "0jGR0j12", "Dhv913W", "5Wtmz86t", "PGjTBGTK", "w3WJxhG", "5WHftw14"
+    ];
+
+    const polaroidContainer = document.getElementById('polaroidContainer');
+    photoIds.slice(0, 9).forEach((id, index) => {
+      const card = document.createElement('div');
+      card.className = 'polaroid-card';
+      card.onclick = () => triggerConfetti();
+      card.innerHTML = `
+        <div class="polaroid-img-box">
+          <img src="https://i.ibb.co/${id}/photo.jpg" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500'" alt="Ruji Memory">
+        </div>
+        <div class="polaroid-caption">My Beautiful Ruji 🩷 Memory #${index+1}</div>
+      `;
+      polaroidContainer.appendChild(card);
+    });
+
+    const poetryList = [
+      "Tumhari muskurahat hi meri dunya hai, Ruji 🩷!",
+      "Teri zulfon ke saaye mein meri sham dhalte hai, Ruji 🩷!",
+      "Shehroz ki har sans par sirf tumhara naam hai, Ruji 🩷!",
+      "Tum mili toh mili mujhe dunya ki har khushi, Ruji 🩷!",
+      "Har janam mein chahiye tera hi sath, meri Ruji 🩷!",
+      "Meri aankhon ka noor ho tum, pyaari Ruji 🩷!",
+      "Tum se hi subah meri, tum se hi meri sham, Ruji 🩷!",
+      "Zindagi khoobsurat hai kyun ke Ruji 🩷 mere sath hai!",
+      "Rab se maangi hui sab se haseen dua ho tum, Ruji 🩷!"
+    ];
+
+    const poetryFlipContainer = document.getElementById('poetryFlipContainer');
+    photoIds.slice(9, 18).forEach((id, index) => {
+      const card = document.createElement('div');
+      card.className = 'photo-flip-card';
+      card.innerHTML = `
+        <div class="photo-flip-inner" onclick="this.parentElement.classList.toggle('flipped')">
+          <div class="photo-front">
+            <img src="https://i.ibb.co/${id}/photo.jpg" onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500'" alt="Ruji Photo">
+            <div class="photo-front-overlay">Tap to read Poetry 👆</div>
+          </div>
+          <div class="photo-back">
+            <div style="font-size:1.05rem; font-style:italic; color:#fff;">" ${poetryList[index]} "</div>
+            <p style="margin-top:15px; font-size:0.85rem; color:#ffe6e6;">— Forever Yours, Shehroz 🩷</p>
+          </div>
+        </div>
+      `;
+      poetryFlipContainer.appendChild(card);
+    });
+
+    const surprisesContainer = document.getElementById('surprisesContainer');
+    
+    // Core Modules (1 to 5)
+    const modules = [
+      { title: "🎂 Ruji's Cake 🩷", html: "<p id='cakeMsg'>Blow Candles & Cut Cake, Ruji 🩷!</p><button onclick='cutCake()'>🕯️ Cut Cake</button>" },
+      { title: "❤️ Shehroz & Ruji 🩷 Love Match", html: "<p id='loveMeter'>Click to Calculate Match</p><button onclick='calcLove()'>Calculate Match 🔥</button>" },
+      { title: "💓 Shehroz's Heart for Ruji 🩷", html: "<p id='bpm'>My BPM: 75 Normal</p><button onclick='boostBpm()'>Touch Shehroz's Heart 💓</button>" },
+      { title: "🌹 Magic Rose for Ruji 🩷", html: "<p id='roseState'>🌱 Tap to Bloom</p><button onclick='bloomRose()'>Bloom Special Rose 🌹</button>" },
+      { title: "🎡 Compliment Wheel for Ruji 🩷", html: "<p id='compText'>Spin for Ruji 🩷!</p><button onclick='spin()'>Spin Wheel 🎡</button>" }
+    ];
+
+    modules.forEach(mod => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<h3>${mod.title}</h3>${mod.html}`;
+      surprisesContainer.appendChild(card);
+    });
+
+    const uniqueWishes = [
+      "Ruji 🩷, aapki hansi Shehroz ka sabse bada taweez hai!",
+      "Promise: Aaj se Ruji 🩷 ke liye coffee hamesha Shehroz banayega!",
+      "Coupon: Free Late Night Long Drive With Shehroz For My Ruji 🩷",
+      "Shayari: Ruji 🩷 tujhe dekha toh yeh jaana sanam, pyar hota hai deewana sanam!",
+      "Quiz: Shehroz ka favourite insan kaun hai? Answer: SIRF RUJI 🩷!",
+      "Quote: Ruji 🩷, you are my today and all of my tomorrows!",
+      "Coupon: 1 Hour Unlimited Foot & Head Massage For Ruji 🩷",
+      "Secret: Main Ruji 🩷 ko roz chupke se dekhta hoon jab woh muskurati hain!",
+      "Shayari: Ruji 🩷 teri saadgi ko parda ki zaroorat nahi, kaun hosh mein rehta hai tujhe dekhne ke baad!",
+      "Promise: Zindagi mein kabhi Ruji 🩷 ki aankhon mein aansu nahi aane dunga!",
+      "Coupon: Dinner at Ruji 🩷's favourite restaurant, Shehroz's treat!",
+      "Surprise: Shehroz ki taraf se Ruji 🩷 ke liye ek infinity tight hug!",
+      "Shayari: Har dua mein Ruji 🩷 tera hi naam aata hai, tu mere dil ko kitna bhaati hai!",
+      "Romantic Note: Ruji 🩷, if I had a flower for every time I thought of you, I could walk in my garden forever!",
+      "Coupon: Movie Night Selection Is Entirely Ruji 🩷's Choice Tonight!",
+      "Fact: Ruji 🩷 is officially certified as the cutest wife in the universe!",
+      "Shayari: Phool toh bohot hain gulshan mein, par Shehroz ke dil ka gulab sirf Ruji 🩷 hai!",
+      "Promise: I will always listen to Ruji 🩷, even when she is angry!",
+      "Coupon: 1 Day Zero Chores / Total Rest Day For My Queen Ruji 🩷",
+      "Romantic Note: Ruji 🩷 stole my heart, but I'll let her keep it forever!",
+      "Shayari: Dil ki dhadkan ban kar dil mein rahogi Ruji 🩷, jab tak sans hai Shehroz ke sath rahogi!",
+      "Coupon: Unlimited Shopping Spree Coupon For Ruji 🩷",
+      "Cute Memory: Remember our first call, Ruji 🩷? Shehroz still smiles thinking about it!",
+      "Shayari: Ek tera hi deedar Ruji 🩷 mujhe chain deta hai, baaki dunya toh faqat shor machati hai!",
+      "Promise: Always walking beside Ruji 🩷, hand in hand, through every storm!",
+      "Coupon: Unlimited Late Night Ice Cream Treat For Ruji 🩷",
+      "Love Quote: Shehroz loves Ruji 🩷 more than words can ever express!",
+      "Shayari: Chand bhi sharmaye jab Ruji 🩷 samne aaye, tera husn toh qayamat dhaa jaye!",
+      "Coupon: Ruji 🩷 Wins Any Argument Automatically Today!",
+      "Secret Wish: Wishing for 100 more birthdays together with my Ruji 🩷!",
+      "Shayari: Teri zulfon ke saaye mein zindagi guzar jaye Ruji 🩷, rab kare yeh haseen raat kabhi na dhal jaye!",
+      "Promise: Shehroz will always be Ruji 🩷's safe space and best friend!",
+      "Coupon: Breakfast in bed tomorrow morning for Queen Ruji 🩷!",
+      "Romantic Note: Loving my Ruji 🩷 is as effortless as breathing!",
+      "Shayari: Nazron se jab Ruji 🩷 tumne mujhe dekha, dil ne kaha bas yahi hai meri dunya!",
+      "Coupon: Weekend Getaway Trip Wish Granted For Ruji 🩷",
+      "Fun Challenge: Ruji 🩷, send Shehroz a flying kiss right now to unlock a real surprise!",
+      "Shayari: Khuda kare Ruji 🩷 tera har din khushiyon se bhara ho, Shehroz ka pyar hamesha tere sath khada ho!",
+      "Coupon: Unlimited Midnight Hugs Voucher For Ruji 🩷",
+      "Love Quote: Shehroz's home isn't a place, it's Ruji 🩷!",
+      "Shayari: Chehre par Ruji 🩷 tere noor hai aisa, chaand bhi lagta hai tere aage fika!",
+      "Promise: Shehroz will always adore and support all of Ruji 🩷's dreams!",
+      "Coupon: Unlimited Desserts For A Whole Week For Ruji 🩷",
+      "Romantic Note: Ruji 🩷 is my soulmate, my partner, and my dream come true!",
+      "Shayari: Dil ki gehraion se nikalta hai yeh paigham, Ruji 🩷 ke naam hai Shehroz ki har ek sham!",
+      "Coupon: Extra Attention & Spoiling Day For Queen Ruji 🩷",
+      "Secret: Ruji 🩷 looks prettiest when she laughs freely!",
+      "Shayari: Rab ne likha hai tera mera rishta, Ruji 🩷 tu hai meri zindagi ka haseen farishta!",
+      "Promise: Never letting go of Ruji 🩷's hand, no matter what!",
+      "Coupon: Unlimited Random Kisses All Day For Ruji 🩷",
+      "Romantic Note: In Ruji 🩷's eyes, Shehroz found his paradise!",
+      "Shayari: Mohabbat ki koi inteha nahi hoti, par Shehroz ki mohabbat sirf Ruji 🩷 par khatam hoti hai!",
+      "Coupon: Late Night Stargazing & Pillow Talk With Ruji 🩷",
+      "Fact: Being married to Ruji 🩷 is Shehroz's greatest achievement!",
+      "Shayari: Ek hi khwahish hai iss dil ki, har janam mein Ruji 🩷 tu hi mile mujhe!",
+      "Promise: To keep making Ruji 🩷 laugh every single day!",
+      "Coupon: Custom Romantic Gift Picked By Ruji 🩷",
+      "Love Quote: Ruji 🩷 is the best part of Shehroz's life!",
+      "Shayari: Teri hansi se hi meri subah hoti hai Ruji 🩷, tu na ho toh zindagi kitni veeran hoti hai!",
+      "Coupon: 1 Free Favor With No Excuses Allowed For Ruji 🩷",
+      "Romantic Note: Shehroz loves Ruji 🩷 to the moon and back a million times!",
+      "Shayari: Zindagi ke har mor par Ruji 🩷 tera sath chahiye, rab se sirf tera hi haath chahiye!",
+      "Promise: Shehroz will always share his last bite of dessert with Ruji 🩷!",
+      "Coupon: Unlimited Compliments Everyday Voucher For Ruji 🩷",
+      "Secret: Shehroz's favorite place in the world is right next to Ruji 🩷!",
+      "Shayari: Dil mera tere paas hai, yeh rishta bohot khas hai, Ruji 🩷 tu hi meri pyas hai!",
+      "Coupon: 1 Secret Wish Granted By Shehroz For Ruji 🩷",
+      "Romantic Note: Ruji 🩷 makes Shehroz's heart skip a beat every day!",
+      "Shayari: Soorat ho ya seerat, Ruji 🩷 tu har lihaz se hai haseen, mera pyar hai tu, mujhe hai pura yakeen!",
+      "Promise: To love Ruji 🩷 more today than yesterday, and less than tomorrow!",
+      "Coupon: Extra Bear Hug On Demand For Ruji 🩷",
+      "Love Quote: Together with Ruji 🩷 is Shehroz's favourite place to be!",
+      "Shayari: Har pal Ruji 🩷 tera hi khayal rehta hai, Shehroz ka dil sirf tere liye hi dhadakta hai!",
+      "Coupon: Romantic Dinner Date Under The Stars For Ruji 🩷",
+      "Final Secret: Ruji 🩷, you are Shehroz's whole world forever! Happy Birthday Queen 👑🩷!"
+    ];
+
+    for (let i = 0; i < uniqueWishes.length; i++) {
+      const cardNum = i + 6;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>Surprise Card #${cardNum} 🩷</h3>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-inner">
+            <div class="flip-front">Tap to Reveal Secret #${cardNum} 🎁</div>
+            <div class="flip-back">${uniqueWishes[i]}</div>
+          </div>
+        </div>
+      `;
+      surprisesContainer.appendChild(card);
+    }
+
+    function triggerConfetti() {
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+    }
+    function cutCake() {
+      document.getElementById('cakeMsg').innerText = "🎉 Happy Birthday Sweetest Wife Ruji 🩷! 🍰";
+      triggerConfetti();
+    }
+    function calcLove() {
+      document.getElementById('loveMeter').innerText = "🔥 1000% Eternal Soulmate Match For Shehroz & Ruji 🩷!";
+      triggerConfetti();
+    }
+    function boostBpm() {
+      document.getElementById('bpm').innerText = "💓 200+ BPM! (Shehroz's Heart beats crazy for Ruji 🩷!)";
+    }
+    function bloomRose() {
+      document.getElementById('roseState').innerText = "🌹 3D Red Magic Rose Bloomed For Ruji 🩷!";
+    }
+    function spin() {
+      const list = ["Ruji 🩷 is the prettiest woman!", "Shehroz loves Ruji 🩷 endlessly!", "Ruji 🩷 is World's Best Wife! 🏆", "Ruji 🩷's smile is Shehroz's paradise! ✨"];
+      document.getElementById('compText').innerText = list[Math.floor(Math.random()*list.length)];
+    }
+  </script>
+</body>
+</html>
