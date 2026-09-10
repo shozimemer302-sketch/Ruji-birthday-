@@ -22,6 +22,26 @@
       overflow-x: hidden;
     }
 
+    /* Floating Music Toggle Button */
+    .music-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 1000;
+      background: rgba(255, 65, 108, 0.85);
+      border: 2px solid #fff;
+      color: #fff;
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     /* Floating Balloons Layer */
     .balloon-container {
       position: fixed;
@@ -165,6 +185,14 @@
 </head>
 <body>
 
+  <!-- Background Music Element -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Music Toggle Control -->
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Music: On</button>
+
   <div class="balloon-container" id="balloonBox"></div>
 
   <div class="main-content">
@@ -185,6 +213,33 @@
   </div>
 
   <script>
+    // Automatic Audio Trigger on First Interaction
+    const bgAudio = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+
+    function startAudioOnTouch() {
+      bgAudio.play().then(() => {
+        musicBtn.innerHTML = "🎵 Music: Playing";
+      }).catch(err => {
+        console.log("Autoplay waiting for touch event.");
+      });
+      document.removeEventListener('click', startAudioOnTouch);
+      document.removeEventListener('touchstart', startAudioOnTouch);
+    }
+
+    document.addEventListener('click', startAudioOnTouch);
+    document.addEventListener('touchstart', startAudioOnTouch);
+
+    function toggleMusic() {
+      if (bgAudio.paused) {
+        bgAudio.play();
+        musicBtn.innerHTML = "🎵 Music: Playing";
+      } else {
+        bgAudio.pause();
+        musicBtn.innerHTML = "🔇 Music: Muted";
+      }
+    }
+
     // Custom Balloon Names List
     const balloonBox = document.getElementById('balloonBox');
     const colors = ['#ff416c', '#ff4b2b', '#e0245e', '#d63384', '#9b59b6', '#ff6b6b'];
