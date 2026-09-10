@@ -22,7 +22,6 @@
       overflow-x: hidden;
     }
 
-    /* Floating Music Toggle Button */
     .music-btn {
       position: fixed;
       top: 15px;
@@ -42,7 +41,6 @@
       gap: 6px;
     }
 
-    /* Floating Balloons Layer */
     .balloon-container {
       position: fixed;
       top: 0;
@@ -56,7 +54,7 @@
     .balloon {
       position: absolute;
       bottom: -160px;
-      width: 95px;  /* Big Balloon Size */
+      width: 95px;
       height: 115px;
       border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
       animation: floatUp 10s infinite linear;
@@ -182,7 +180,6 @@
     .flip-front { background: rgba(255,255,255,0.15); }
     .flip-back { background: linear-gradient(135deg, #ff416c, #8a2387); transform: rotateY(180deg); }
 
-    /* Special Image Box inside Surprise Cards */
     .surprise-img-content {
       display: flex;
       flex-direction: column;
@@ -200,7 +197,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    /* Rose Display Box */
     #roseContainer {
       display: none;
       margin-top: 15px;
@@ -222,12 +218,10 @@
 </head>
 <body>
 
-  <!-- Background Music Element -->
   <audio id="bgMusic" loop preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Music Toggle Control -->
   <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Music: On</button>
 
   <div class="balloon-container" id="balloonBox"></div>
@@ -250,7 +244,6 @@
   </div>
 
   <script>
-    // Automatic Audio Trigger on First Interaction
     const bgAudio = document.getElementById('bgMusic');
     const musicBtn = document.getElementById('musicBtn');
 
@@ -277,7 +270,6 @@
       }
     }
 
-    // Custom Balloon Names List
     const balloonBox = document.getElementById('balloonBox');
     const colors = ['#ff416c', '#ff4b2b', '#e0245e', '#d63384', '#9b59b6', '#ff6b6b'];
     
@@ -362,12 +354,11 @@
 
     const surprisesContainer = document.getElementById('surprisesContainer');
     
-    // Core Modules (1 to 5) - Rose module upgraded to display real image!
     const modules = [
       { title: "🎂 Ruji's Cake 🩷", html: "<p id='cakeMsg'>Blow Candles & Cut Cake, Ruji 🩷!</p><button onclick='cutCake()'>🕯️ Cut Cake</button>" },
       { title: "❤️ Shehroz & Ruji 🩷 Love Match", html: "<p id='loveMeter'>Click to Calculate Match</p><button onclick='calcLove()'>Calculate Match 🔥</button>" },
       { title: "💓 Shehroz's Heart for Ruji 🩷", html: "<p id='bpm'>My BPM: 75 Normal</p><button onclick='boostBpm()'>Touch Shehroz's Heart 💓</button>" },
-      { title: "🌹 Magic Rose for Ruji 🩷", html: "<p id='roseState'>🌱 Tap to Bloom</p><button onclick='bloomRose()'>Bloom Special Rose 🌹</button><div id='roseContainer'><img src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500' alt='Red Rose'></div>" },
+      { title: "🌹 Magic Rose for Ruji 🩷", html: "<p id='roseState'>🌱 Tap to Bloom</p><button onclick='bloomRose()'>Bloom Special Rose 🌹</button><div id='roseContainer'></div>" },
       { title: "🎡 Compliment Wheel for Ruji 🩷", html: "<p id='compText'>Spin for Ruji 🩷!</p><button onclick='spin()'>Spin Wheel 🎡</button>" }
     ];
 
@@ -378,7 +369,6 @@
       surprisesContainer.appendChild(card);
     });
 
-    // Surprises 6 to 80 (Text Wishes)
     const uniqueWishes = [
       "Ruji 🩷, aapki hansi Shehroz ka sabse bada taweez hai!",
       "Promise: Aaj se Ruji 🩷 ke liye coffee hamesha Shehroz banayega!",
@@ -473,7 +463,6 @@
       surprisesContainer.appendChild(card);
     }
 
-    // NEW 20 VISUAL SURPRISES (#81 to #100) WITH REAL PICTURES ON TAP
     const visualSurprises = [
       { text: "Grand Delicious Birthday Cake 🎂", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300" },
       { text: "A Giant Cute Teddy Bear Hug 🧸", img: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=300" },
@@ -534,6 +523,7 @@
     }
     function bloomRose() {
       document.getElementById('roseState').innerText = "🌹 Real Red Magic Rose Bloomed For Ruji 🩷!";
+      document.getElementById('roseContainer').innerHTML = "<img src='https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=500' alt='Red Rose'>";
       document.getElementById('roseContainer').style.display = 'block';
       triggerConfetti();
     }
